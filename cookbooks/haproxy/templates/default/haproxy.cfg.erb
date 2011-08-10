@@ -1,0 +1,99 @@
+# Simple load-balancing in the cloud
+
+global
+  log 127.0.0.1   local0
+  log 127.0.0.1   local1 notice
+#  log 127.0.0.1   local1 info
+  maxconn 25000
+  chroot /usr/share/haproxy
+  uid 99
+  gid 99
+  daemon
+  #debug
+  #quiet
+
+defaults
+  log     global
+  mode    http
+  option  httplog
+  option  dontlognull
+  retries 3
+  option redispatch
+  maxconn 25000
+  timeout http-request  60000
+  timeout connect	60000 # Might want to set lower
+  timeout client	600000 # 1 minute to alleviate IE woes
+  timeout server	600000
+
+frontend bitmenu *:8000
+  log global
+  option httplog
+  option logasap
+#  option forwardfor # Commened out because apache now fronts haproxy
+  acl acl_downloads url_sub download
+  acl acl_web url_sub www
+
+  use_backend download_farm if acl_downloads
+  use_backend web_farm if acl_web
+
+  default_backend web_farm
+
+  # Capture requests to log
+  capture request header Host len 200
+  capture request header Referer len 2000
+  capture request header User-Agent len 200
+  capture request header Cookie len 200
+  capture response header instance-id len 16
+  capture response header Set-Cookie len 100
+  capture response header Content-Type len 100
+  capture response header Expires len 100
+
+
+backend web_farm
+  stats enable
+  stats auth bitmenu:bitmenu888
+  fullconn 10000
+  mode http
+  balance roundrobin
+  cookie JSESSIONID prefix
+###  cookie X-LB-WEB insert nocache
+###  option httpclose
+  option http-server-close
+  option forwardfor
+#  option httpchk HEAD /200.jsp HTTP/1.0
+  option httpchk GET /200.jsp
+###  option persist
+###  option redispatch
+  # "We're Upgrading" message if it goes to backup
+  server dummy1 localhost:8081 backup
+  # Only new servers should be below this line
+<% @web_nodes.each do |n| %>
+  server bitmenu<%= n[:id] %>_web <%= n[:eth1] %>:8080 cookie <%= n[:iid] %> weight 128 minconn 30 maxconn 300 check
+<% end %>
+
+backend web_farm
+  stats enable
+  stats auth bitmenu:bitmenu888
+  fullconn 10000
+  mode http
+  balance roundrobin
+  cookie JSESSIONID prefix
+  option http-server-close
+  option forwardfor
+  option httpchk GET /200.jsp
+  # "We're Upgrading" message if it goes to backup
+  server dummy1 localhost:8081 backup
+  # Only new servers should be below this line
+<% @download_nodes.each do |n| %>
+  server bitmenu<%= n[:id] %>_download <%= n[:eth1] %>:8080 cookie <%= n[:iid] %> weight 128 minconn 30 maxconn 300 check
+<% end %>
+
+ rspidel ^Set-cookie:\ IP=       # do not let this cookie tell our internal IP address
+
+        errorfile       400     /etc/haproxy/errorfiles/400.http
+        errorfile       403     /etc/haproxy/errorfiles/403.http
+        errorfile       408     /etc/haproxy/errorfiles/408.http
+        errorfile       500     /etc/haproxy/errorfiles/500.http
+        errorfile       502     /etc/haproxy/errorfiles/502.http
+        errorfile       503     /etc/haproxy/errorfiles/503.http
+
