@@ -17,9 +17,9 @@
 # limitations under the License.
 #
 
-web_nodes = search(:node, "role:web AND role:${node[:environmnent]}")
-download_nodes = search(:node, "role:download AND role:${node[:environmnent]}")
-database_nodes = search(:node, "role:database AND role:${node[:environmnent]}")
+web_nodes = search(:node, "role:web AND role:${node[:env]}")
+download_nodes = search(:node, "role:download AND role:${node[:env]}")
+database_nodes = search(:node, "role:database AND role:${node[:env]}")
 
 package "haproxy" do
   action :install
