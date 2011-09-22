@@ -1,0 +1,15 @@
+    {
+      "id": "vincent",
+      "ssh_keys": [
+        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDNAYXYNxTRX+cDEXjytFGQbCAojbLTUQ3CPFQHYtEx2Ms6P8lecU8vE0JG98pc51dRUqUiWN3FbcvnUUVjXyo0d/zzodhRUsJVkUAKYlvyRdUxR+vjrSOQj+SJIPqR90HdG1S5Wn0zIhZQ6fW5RBi3j0315M9/9tOi1DQ9ZtPStaW95wdOv8MUbyPtwdr++fSSmuo0B6zzWN8FQO3AmKPWSQ2xqw54spEnmAcJVPClUT4Nz3HcX6HiKjw+Qc4T/v9UZWI7+siqjL946N1prFCLQe8cxcFdoNWxDUlLN6YSc49bsQ+dvfZB7o3OZBTRnhWgEPDq7Dg2a5KCsSZWA5tN vincent@castor",
+	"ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAwKb0NlrjQ1O23RFaDokmKmPWNUSdRUNEzm1mE/ACi7/064TWnq+RI0SahWkmrqutkWES3AMZ9OPPAz/uNnVnRpPTZybLtej+meSAGKUcm3ctwG38WyMLkXAoEIjLzfkZi3YMeHqYgO0nW5RyofI3QvBU8iaBGWONA+WAaGxI+yx0l/X1x2RrGzU5HEyS0gZIANoP8q/TdWUR6dfTuXEvTlIqCmR4zYRRt72z3hJ5Ba9C8OnahdJ9Bke/U8EtFruSKix9Uvr0TuSu1Q1oGp/txsbTq3XjkbLgilqslV485TTYaDGrjHmR4yEXgHvU6PdAlydgJRi0YtkbiZWUjY8vEQ== crinis@aeneas"
+        ],
+      "password": "NSbZ.5ZLmKwHo",
+      "groups": "devops",
+      "uid": 2001,
+      "gid": 2001,
+      "name": "Vincent Jørgensen",
+      "shell": "\/bin\/bash",
+      "comment": "Bitmenu Chief Operations Engineer",
+      "email": "vincent@bitmenu.com"
+    }
